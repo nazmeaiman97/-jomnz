@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JomNZ — Travel Beyond the Ordinary</title>
+<meta name="description" content="Halal-friendly, Malay-speaking, privately guided New Zealand journeys designed around you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Lora:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Built on the "Miti Navi" style reference: a Tuscan sea-view chapbook on raw linen —
+     monochrome editorial print, square edges everywhere, monospace running the whole UI,
+     an oversized romantic display serif for headlines, and one warm apricot underline as
+     the only chromatic accent. No filled buttons exist in this system — every action is
+     an underlined link. Adapted here for New Zealand rather than yachts. */
+  :root{
+    --color-linen:#e6dece;
+    --color-deep-ink:#000e13;
+    --color-carbon:#232323;
+    --color-soft-ash:#999999;
+    --color-warm-apricot:#ffdead;
+    --color-obsidian:#000000;
+    --font-mono:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    --font-display:'Playfair Display',Georgia,serif;
+    --font-sub:'Lora',Georgia,serif;
+    --font-eyebrow:'Times New Roman',Times,Georgia,serif;
+    --page-max:1200px;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--color-linen);
+    color:var(--color-carbon);
+    font-family:var(--font-mono);
+    font-size:15px;
+    line-height:1.45;
+    letter-spacing:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (min-width:640px){ body{font-size:14px;line-height:1.4} }
+
+  /* ---------- Mobile readability pass ---------- */
+  @media (max-width:479px){
+    .pkg-desc,.about-copy .lead,.contact-terms{letter-spacing:.6px;line-height:1.65}
+    .why-row{letter-spacing:.6px}
+    .eyebrow{font-size:12px;letter-spacing:2.5px}
+    .gallery-cap,.masonry-cap{font-size:11px;letter-spacing:.8px}
+    .eq-option{font-size:13px;padding:12px 16px}
+    .eq-q{font-size:19px}
+  }
+  img,video{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--page-max);margin:0 auto;padding-inline:clamp(20px,5vw,60px)}
+  p{margin:0}
+  h1,h2,h3{margin:0;font-weight:400}
+
+  /* The only CTA style on the site: underlined mono link, 1px apricot rule 4px below text */
+  .uline{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--color-deep-ink);
+    padding-bottom:4px;border-bottom:1px solid var(--color-warm-apricot);
+    transition:color .2s;
+  }
+  .uline:hover{color:var(--color-obsidian)}
+  :focus-visible{outline:1px solid var(--color-deep-ink);outline-offset:3px}
+
+  /* ---------- Split top nav ---------- */
+  nav{
+    position:relative;display:flex;align-items:center;justify-content:space-between;
+    padding:24px clamp(20px,5vw,60px);max-width:var(--page-max);margin:0 auto;
+  }
+  .nav-cluster{display:none;align-items:center;gap:20px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--color-deep-ink)}
+  @media (min-width:800px){ .nav-cluster{display:flex} }
+  .nav-cluster a:hover{color:var(--color-obsidian);text-decoration:underline;text-decoration-color:var(--color-warm-apricot);text-underline-offset:4px}
+  .wordmark{text-align:center}
+  .wordmark .mark{font-family:var(--font-display);font-size:clamp(24px,3vw,34px);color:var(--color-deep-ink)}
+  .wordmark .sub{display:block;margin-top:4px;font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--color-soft-ash);text-transform:uppercase}
+  .nav-mobile-cta{font-size:13px}
+  @media (min-width:800px){ .nav-mobile-cta{display:none} }
+
+  /* ---------- Mobile hamburger menu ---------- */
+  .nav-burger{
+    display:flex;flex-direction:column;justify-content:center;gap:5px;
+    width:30px;height:30px;padding:0;background:none;border:none;cursor:pointer;flex-shrink:0;
+  }
+  @media (min-width:800px){ .nav-burger{display:none} }
+  .nav-burger span{display:block;width:100%;height:1.5px;background:var(--color-deep-ink);transition:transform .25s ease,opacity .25s ease}
+  .nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .nav-mobile-panel{
+    position:fixed;inset:0;z-index:150;background:var(--color-linen);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+    opacity:0;visibility:hidden;transform:translateY(-12px);
+    transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s;
+  }
+  .nav-mobile-panel.is-open{
+    opacity:1;visibility:visible;transform:translateY(0);
+    transition:opacity .3s ease,transform .3s ease,visibility 0s linear 0s;
+  }
+  .nav-mobile-panel a{
+    font-family:var(--font-sub);font-size:24px;color:var(--color-deep-ink);
+  }
+  @media (min-width:800px){ .nav-mobile-panel{display:none} }
+  body.nav-open{overflow:hidden}
+
+  /* ---------- Vertical side tab ---------- */
+  .side-tab{
+    position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:40;
+    background:var(--color-deep-ink);color:var(--color-linen);
+    width:26px;padding:18px 0;display:none;align-items:center;justify-content:center;
+  }
+  @media (min-width:900px){ .side-tab{display:flex} }
+  .side-tab span{
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;
+  }
+
+  /* ---------- Hero: arched image ---------- */
+  .hero-arch{
+    width:100%;max-width:var(--page-max);margin:0 auto;height:min(70vh,620px);position:relative;overflow:hidden;
+    clip-path:url(#heroArchClip);
+  }
+  @supports not (clip-path: url(#heroArchClip)){
+    .hero-arch{border-radius:600px 600px 0 0}
+  }
+  .hero-arch img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity 1.6s ease;
+  }
+  .hero-arch img.is-active{opacity:1}
+  @media (prefers-reduced-motion:reduce){ .hero-arch img{transition:none} }
+  .hero-display{padding-block:clamp(40px,7vw,72px) 0}
+  .hero-display h1{
+    font-family:var(--font-display);font-weight:400;
+    font-size:clamp(44px,9vw,130px);line-height:0.92;color:var(--color-deep-ink);
+    max-width:14ch;
+  }
+  .hero-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:28px}
+  .hero-sub{max-width:40ch;font-size:16px;letter-spacing:1.6px;color:var(--color-carbon)}
+
+  /* ---------- sections generic ---------- */
+  section{position:relative}
+  .section-pad{padding-block:60px}
+  .section-head{text-align:center;max-width:620px;margin:0 auto 40px}
+  .eyebrow{
+    display:block;font-family:var(--font-eyebrow);font-size:14px;letter-spacing:4px;
+    text-transform:uppercase;color:var(--color-soft-ash);margin-bottom:14px;
+  }
+  .section-head h2{font-family:var(--font-sub);font-size:26px;line-height:1.2;color:var(--color-deep-ink)}
+  .rule{width:60px;height:1px;background:var(--color-carbon);margin:26px auto 0;border:none}
+  .rule.left{margin-left:0}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:translateY(0)}
+
+  /* ---------- Intro / statement blocks ---------- */
+  .intro p{font-family:var(--font-display);font-size:clamp(26px,3.2vw,36px);line-height:1.15;color:var(--color-deep-ink);max-width:16ch;text-align:center;margin:0 auto}
+
+  /* ---------- Packages: flat content cards, hairline separated ---------- */
+  .pkg-grid{display:grid;grid-template-columns:1fr;border-top:1px solid var(--color-carbon)}
+  @media (min-width:760px){ .pkg-grid{grid-template-columns:1fr 1fr} }
+  .pkg-card{
+    border-bottom:1px solid var(--color-carbon);
+    padding:28px 0;
+  }
+  @media (min-width:760px){
+    .pkg-card{padding:32px 28px}
+    .pkg-card:nth-child(odd){border-right:1px solid var(--color-carbon)}
+  }
+  .pkg-img{width:100%;aspect-ratio:4/3;overflow:hidden;position:relative}
+  .pkg-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .pkg-body{margin-top:18px}
+  .pkg-tag{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--color-soft-ash)}
+  .pkg-body h3{margin-top:8px;font-family:var(--font-sub);font-size:24px;color:var(--color-deep-ink)}
+  .pkg-dur{display:block;margin-top:4px;font-size:11px;letter-spacing:1px;color:var(--color-soft-ash);text-transform:uppercase}
+  .pkg-desc{margin-top:14px;font-size:14px;letter-spacing:1.4px;line-height:1.6;color:var(--color-carbon);max-width:46ch}
+  .pkg-body .uline{margin-top:18px}
+
+  /* ---------- Display statement ---------- */
+  .statement-wrap{text-align:left}
+  .statement{
+    font-family:var(--font-display);font-size:clamp(34px,6.5vw,72px);line-height:0.92;color:var(--color-deep-ink);
+    max-width:14ch;
+  }
+  .statement .acc{border-bottom:3px solid var(--color-warm-apricot);padding-bottom:2px}
+  .statement-cite{display:block;margin-top:24px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--color-soft-ash)}
+
+  /* ---------- Experiences: dark image windows ---------- */
+  .exp-grid{display:grid;grid-template-columns:1fr;gap:40px}
+  @media (min-width:700px){ .exp-grid{grid-template-columns:repeat(3,1fr)} }
+  .exp-window{background:var(--color-deep-ink);padding:24px}
+  .exp-window .photo{aspect-ratio:4/5;overflow:hidden;position:relative}
+  .exp-window .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .exp-cap{margin-top:14px;font-size:13px;letter-spacing:1.4px;color:var(--color-linen)}
+  .exp-cap strong{display:block;font-family:var(--font-sub);font-size:17px;color:var(--color-linen);margin-bottom:6px;font-weight:400}
+
+  /* ---------- Why JomNZ: printed-catalog rows ---------- */
+  .why-list{border-top:1px solid var(--color-carbon)}
+  .why-row{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:18px 0;border-bottom:1px solid var(--color-carbon);
+    font-size:14px;letter-spacing:1.4px;color:var(--color-deep-ink);
+  }
+  .why-row span.n{font-size:11px;color:var(--color-soft-ash);letter-spacing:1px}
+
+  /* ---------- About: asymmetric text + image ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr;gap:40px}
+  @media (min-width:800px){ .about-grid{grid-template-columns:0.9fr 1.1fr;align-items:center;gap:56px} }
+  .about-window{background:var(--color-deep-ink);padding:20px}
+  .about-window .photo{aspect-ratio:4/5;position:relative;overflow:hidden}
+  .about-window .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .about-copy .lead{margin-top:16px;font-size:14px;letter-spacing:1.4px;line-height:1.7;color:var(--color-carbon);max-width:48ch}
+  .about-copy .statement{margin-top:30px}
+
+  /* ---------- Gallery: contact-sheet grid of every trip photo ---------- */
+  .gallery-section{position:relative;overflow:hidden}
+  .gallery-parallax-layer{
+    position:absolute;inset:-10% 0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(214,120,65,.07), transparent 45%),
+      radial-gradient(circle at 80% 70%, rgba(20,24,26,.05), transparent 50%);
+    will-change:transform;transform:translateY(0);
+  }
+  .gallery-section .wrap{position:relative;z-index:1}
+  .gallery-section .section-head{will-change:transform;transform:translateY(0)}
+  .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--color-carbon);border-left:1px solid var(--color-carbon)}
+  @media (min-width:640px){ .gallery-grid{grid-template-columns:repeat(3,1fr)} }
+  @media (min-width:960px){ .gallery-grid{grid-template-columns:repeat(4,1fr)} }
+  .gallery-item{
+    position:relative;aspect-ratio:1/1;overflow:hidden;cursor:pointer;
+    border-right:1px solid var(--color-carbon);border-bottom:1px solid var(--color-carbon);
+  }
+  .gallery-item img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease,filter .5s ease;filter:grayscale(.15)}
+  .gallery-item:hover img{transform:scale(1.04);filter:grayscale(0)}
+  .gallery-cap{
+    position:absolute;left:0;right:0;bottom:0;padding:10px 12px;
+    background:linear-gradient(0deg,rgba(0,14,19,.82),transparent 80%);
+    color:var(--color-linen);font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+    opacity:0;transition:opacity .3s ease;
+  }
+  .gallery-item:hover .gallery-cap{opacity:1}
+  .gallery-item.gallery-hidden{display:none}
+  .reveal-pop{opacity:0;transform:translateY(26px) scale(.96);transition:opacity .6s cubic-bezier(.2,.7,.3,1),transform .6s cubic-bezier(.2,.7,.3,1)}
+  .reveal-pop.in{opacity:1;transform:translateY(0) scale(1)}
+  .gallery-grid .gallery-item:nth-child(1){transition-delay:0s}
+  .gallery-grid .gallery-item:nth-child(2){transition-delay:.06s}
+  .gallery-grid .gallery-item:nth-child(3){transition-delay:.12s}
+  .gallery-grid .gallery-item:nth-child(4){transition-delay:.18s}
+  .gallery-grid .gallery-item:nth-child(5){transition-delay:.24s}
+  .gallery-grid .gallery-item:nth-child(6){transition-delay:.3s}
+  .gallery-grid .gallery-item:nth-child(7){transition-delay:.36s}
+  .gallery-grid .gallery-item:nth-child(8){transition-delay:.42s}
+  @media (prefers-reduced-motion:reduce){
+    .reveal-pop{transition:none;opacity:1;transform:none}
+    .gallery-parallax-layer,.gallery-section .section-head{transform:none!important}
+  }
+  .gallery-more-wrap{display:flex;justify-content:center;margin-top:40px}
+  .gallery-more-btn{
+    font-family:var(--font-mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--color-deep-ink);background:none;border:1px solid var(--color-carbon);border-radius:0;
+    padding:14px 34px;cursor:pointer;transition:border-color .15s,color .15s,background .15s;
+  }
+  .gallery-more-btn:hover{border-color:var(--color-obsidian);color:var(--color-obsidian)}
+  .gallery-more-btn:disabled{opacity:.45;cursor:default}
+
+  /* ---------- Gallery full page (Pinterest-style) ---------- */
+  .gallery-page{
+    position:fixed;inset:0;z-index:200;background:var(--color-linen);
+    opacity:0;visibility:hidden;transform:translateY(16px);
+    transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+  .gallery-page.is-open{
+    opacity:1;visibility:visible;transform:translateY(0);
+    transition:opacity .35s ease,transform .35s ease,visibility 0s linear 0s;
+  }
+  .gallery-page-bar{
+    position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:18px;
+    padding:20px 24px;background:var(--color-linen);border-bottom:1px solid var(--color-carbon);
+  }
+  @media (min-width:640px){ .gallery-page-bar{padding:24px 48px} }
+  .gallery-back-btn{
+    display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;
+    letter-spacing:1.5px;text-transform:uppercase;color:var(--color-deep-ink);background:none;
+    border:1px solid var(--color-carbon);border-radius:0;padding:10px 18px;cursor:pointer;
+    transition:border-color .15s,color .15s;flex-shrink:0;
+  }
+  .gallery-back-btn:hover{border-color:var(--color-obsidian);color:var(--color-obsidian)}
+  .gallery-back-arrow{font-size:14px}
+  .gallery-page-title{
+    font-family:var(--font-sub);font-size:16px;color:var(--color-deep-ink);flex:1;
+  }
+  @media (min-width:640px){ .gallery-page-title{font-size:19px} }
+  .gallery-page-count{
+    font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--color-soft-ash);flex-shrink:0;
+  }
+  .masonry-wrap{padding:28px 20px 80px}
+  @media (min-width:640px){ .masonry-wrap{padding:36px 40px 100px} }
+  .masonry-grid{
+    column-count:2;column-gap:14px;max-width:1400px;margin:0 auto;
+  }
+  @media (min-width:640px){ .masonry-grid{column-count:3;column-gap:18px} }
+  @media (min-width:960px){ .masonry-grid{column-count:4} }
+  @media (min-width:1280px){ .masonry-grid{column-count:5} }
+  .masonry-item{
+    position:relative;break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:14px;
+    overflow:hidden;background:var(--color-carbon);cursor:pointer;
+  }
+  @media (min-width:640px){ .masonry-item{margin-bottom:18px} }
+  .masonry-item img{
+    display:block;width:100%;height:auto;transition:transform .5s ease,filter .5s ease;filter:grayscale(.15);
+  }
+  .masonry-item:hover img{transform:scale(1.03);filter:grayscale(0)}
+  .masonry-cap{
+    position:absolute;left:0;right:0;bottom:0;padding:10px 12px;
+    background:linear-gradient(0deg,rgba(0,14,19,.82),transparent 80%);
+    color:var(--color-linen);font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+    opacity:0;transition:opacity .3s ease;
+  }
+  .masonry-item:hover .masonry-cap{opacity:1}
+  body.gallery-page-open{overflow:hidden}
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:300;background:rgba(0,14,19,.96);
+    opacity:0;visibility:hidden;transition:opacity .25s ease,visibility 0s linear .25s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lightbox.is-open{opacity:1;visibility:visible;transition:opacity .25s ease,visibility 0s linear 0s}
+  .lightbox-close,.lightbox-prev,.lightbox-next{
+    position:absolute;background:none;border:1px solid rgba(245,240,230,.4);border-radius:0;
+    color:var(--color-linen);cursor:pointer;transition:border-color .15s,background .15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lightbox-close:hover,.lightbox-prev:hover,.lightbox-next:hover{border-color:var(--color-linen);background:rgba(245,240,230,.08)}
+  .lightbox-close{top:10px;right:10px;width:36px;height:36px;font-size:16px;z-index:2}
+  .lightbox-prev,.lightbox-next{top:50%;transform:translateY(-50%);width:36px;height:36px;font-size:18px}
+  .lightbox-prev{left:6px}
+  .lightbox-next{right:6px}
+  @media (min-width:640px){
+    .lightbox-close{top:20px;right:20px;width:42px;height:42px;font-size:18px}
+    .lightbox-prev,.lightbox-next{width:48px;height:48px;font-size:20px}
+    .lightbox-prev{left:28px}
+    .lightbox-next{right:28px}
+  }
+  .lightbox-stage{
+    max-width:94vw;max-height:84vh;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 46px;
+  }
+  @media (min-width:640px){ .lightbox-stage{max-width:90vw;max-height:88vh;gap:16px;padding:0 70px} }
+  .lightbox-stage img{
+    max-width:100%;max-height:72vh;width:auto;height:auto;object-fit:contain;display:block;
+  }
+  @media (min-width:640px){ .lightbox-stage img{max-height:78vh} }
+  .lightbox-cap{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--color-linen);opacity:.85;text-align:center;
+  }
+  .lightbox-counter{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+    font-family:var(--font-mono);font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--color-linen);opacity:.65;
+  }
+  body.lightbox-open{overflow:hidden}
+
+  /* ---------- Contact ---------- */
+  .contact-wrap{text-align:center}
+  .contact-terms{margin:22px auto 0;font-size:14px;letter-spacing:1.4px;line-height:1.7;color:var(--color-carbon);max-width:52ch}
+  .contact-actions{display:flex;justify-content:center;gap:28px;margin-top:30px;flex-wrap:wrap}
+  .cta-note{margin-top:18px;font-size:12px;color:var(--color-soft-ash);min-height:16px}
+
+  /* ---------- Enquiry mini-flow: 3 quick questions before the contact form ---------- */
+  .eq-flow{max-width:520px;margin:44px auto 0;text-align:left}
+  .eq-progress{display:flex;justify-content:center;gap:10px;margin-bottom:36px}
+  .eq-dot{width:28px;height:2px;background:var(--color-ash-divider, var(--color-soft-ash));opacity:.5}
+  .eq-dot.is-done{background:var(--color-warm-apricot);opacity:1}
+  .eq-dot.is-current{background:var(--color-deep-ink);opacity:1}
+  .eq-step{display:none}
+  .eq-step.active{display:block;animation:eqFade .4s ease}
+  @keyframes eqFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .eq-label{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--color-soft-ash);margin-bottom:10px}
+  .eq-q{font-family:var(--font-sub);font-size:21px;line-height:1.3;color:var(--color-deep-ink);font-weight:400;text-align:left}
+  .eq-options{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .eq-option{
+    font-family:var(--font-mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--color-deep-ink);background:none;border:1px solid var(--color-carbon);border-radius:0;
+    padding:11px 16px;cursor:pointer;transition:border-color .15s,color .15s;
+  }
+  .eq-option:hover{border-color:var(--color-obsidian);color:var(--color-obsidian)}
+  .eq-option.selected{border-color:var(--color-obsidian);color:var(--color-obsidian);border-bottom:3px solid var(--color-warm-apricot)}
+  .eq-back{margin-top:22px;font-size:11px}
+  .eq-done .eq-q{text-align:center}
+  .eq-summary-line{margin-top:14px;font-size:14px;letter-spacing:1.2px;line-height:1.6;color:var(--color-carbon);text-align:center}
+  .eq-done .contact-actions{justify-content:center}
+
+  footer{border-top:1px solid var(--color-carbon);padding-block:36px}
+  footer .wrap{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+  @media (min-width:700px){ footer .wrap{flex-direction:row;justify-content:space-between;text-align:left} }
+  .foot-mark{font-family:var(--font-display);font-size:20px;color:var(--color-deep-ink)}
+  .foot-meta{font-size:11px;letter-spacing:1px;color:var(--color-soft-ash);text-transform:uppercase}
+
+  @media (prefers-reduced-motion:reduce){ .reveal{transition:none;opacity:1;transform:none} }
+</style>
+</head>
+<body>
+
+<div class="side-tab" aria-hidden="true"><span>A Journey, Not A Tour — JomNZ</span></div>
+
+<nav>
+  <button type="button" class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navMobilePanel">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-cluster">
+    <a href="#packages">Packages</a>
+    <a href="#why">Why Us</a>
+  </div>
+  <a href="#top" class="wordmark">
+    <span class="mark">JomNZ</span>
+    <span class="sub">New Zealand</span>
+  </a>
+  <div class="nav-cluster">
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="uline">Enquire →</a>
+  </div>
+  <a href="#contact" class="uline nav-mobile-cta">Enquire →</a>
+</nav>
+
+<div class="nav-mobile-panel" id="navMobilePanel" aria-hidden="true">
+  <a href="#packages">Packages</a>
+  <a href="#why">Why Us</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#about">About</a>
+  <a href="#contact" class="uline">Enquire →</a>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="heroArchClip" clipPathUnits="objectBoundingBox">
+      <path d="M0,1 L0,0.290323 C0,0.129032 0.183333,0 0.5,0 C0.816667,0 1,0.129032 1,0.290323 L1,1 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<header id="top">
+  <div class="hero-arch" id="heroArch">
+    <img src="images/ff4911a4c16db638bf5a158cd88859fc.jpg" alt="Lamb grazing with mountain backdrop, New Zealand" loading="eager" class="is-active">
+    <img src="images/7b55bef625e8b26ce3c4c6fc126408fb.jpg" alt="Milford Sound waterfalls, New Zealand" loading="lazy">
+    <img src="images/3cfa2310ae319e48e427c87733d3189f.jpg" alt="Lupin fields, New Zealand" loading="lazy">
+    <img src="images/b8cdd8909e640ce01212967fafa3838e.jpg" alt="Alpine valley and stream, New Zealand" loading="lazy">
+    <img src="images/cac803b9c1e6bf31c3f5f3dd1368192b.jpg" alt="Baldwin Street, Dunedin, New Zealand" loading="lazy">
+  </div>
+  <div class="wrap hero-display reveal in">
+    <h1>Travel Beyond the Ordinary.</h1>
+    <div class="hero-foot">
+      <p class="hero-sub">Halal-friendly, Malay-speaking, privately guided journeys — we design New Zealand around what you want to experience.</p>
+      <a href="#packages" class="uline">View Packages →</a>
+    </div>
+  </div>
+</header>
+
+<section class="section-pad intro">
+  <div class="wrap reveal">
+    <p>We ask what you want to experience — then build the journey around it.</p>
+  </div>
+</section>
+
+<section class="section-pad" id="packages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Our Packages</span>
+      <h2>Four ways to see New Zealand</h2>
+      <hr class="rule">
+    </div>
+
+    <div class="pkg-grid reveal">
+      <article class="pkg-card">
+        <div class="pkg-img"><img src="images/e4a687f4a011ed3724aabf620a4a43a2.jpg" alt="" loading="lazy"></div>
+        <div class="pkg-body">
+          <span class="pkg-tag">01 — Signature · Private &amp; Custom</span>
+          <h3>Private &amp; Custom</h3>
+          <span class="pkg-dur">Tailored to you</span>
+          <p class="pkg-desc">This is what we do best. We get to know you, understand what you like, and build the trip together — from the places you visit to the experiences you have.</p>
+          <a href="#contact" class="uline">Enquire →</a>
+        </div>
+      </article>
+
+      <article class="pkg-card">
+        <div class="pkg-img"><img src="images/1e2ed4e6991df891ecbe7331fdcf210e.jpg" alt="" loading="lazy"></div>
+        <div class="pkg-body">
+          <span class="pkg-tag">02 — Group &amp; Custom Tour</span>
+          <h3>North &amp; South</h3>
+          <span class="pkg-dur">10 Days / 8 Nights</span>
+          <p class="pkg-desc">A complete New Zealand experience covering both islands. Perfect for travellers who want to see and feel more of New Zealand in one trip.</p>
+          <a href="#contact" class="uline">Enquire →</a>
+        </div>
+      </article>
+
+      <article class="pkg-card">
+        <div class="pkg-img"><img src="images/54804e2032475b30959c7b8d6aaeb7d4.jpg" alt="" loading="lazy"></div>
+        <div class="pkg-body">
+          <span class="pkg-tag">03 — Group &amp; Custom Tour</span>
+          <h3>South Island</h3>
+          <span class="pkg-dur">7 Days / 5 Nights</span>
+          <p class="pkg-desc">Stunning mountains, lakes, and scenic roads. Perfect for those who want to focus on New Zealand's natural beauty and adventure.</p>
+          <a href="#contact" class="uline">Enquire →</a>
+        </div>
+      </article>
+
+      <article class="pkg-card">
+        <div class="pkg-img"><img src="images/81419f5d20af3c0afe27e2dc714a5241.jpg" alt="" loading="lazy"></div>
+        <div class="pkg-body">
+          <span class="pkg-tag">04 — Self-Drive</span>
+          <h3>Self Drive &amp; Custom</h3>
+          <span class="pkg-dur">Your pace, your route</span>
+          <p class="pkg-desc">A fully customised self-drive package — route, accommodation and activities planned around you, with full support throughout your journey.</p>
+          <a href="#contact" class="uline">Enquire →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad statement-wrap">
+  <div class="wrap reveal">
+    <p class="statement">We take you beyond the usual route to the <span class="acc">real New Zealand</span>.</p>
+    <span class="statement-cite">More Than A Tour</span>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Beyond The Postcard</span>
+      <h2>Three ways we go further</h2>
+      <hr class="rule">
+    </div>
+    <div class="exp-grid reveal">
+      <div class="exp-window">
+        <div class="photo"><img src="images/e46f4804a1885452daef0ed56487e604.jpg" alt="" loading="lazy"></div>
+        <div class="exp-cap"><strong>Dairy Farm Experience</strong>Get a glimpse into authentic New Zealand farming life.</div>
+      </div>
+      <div class="exp-window">
+        <div class="photo"><img src="images/a3d86cc78c5afb9bd9c81d18a5bdd2d0.jpg" alt="" loading="lazy"></div>
+        <div class="exp-cap"><strong>Hidden Gems</strong>Beyond the famous attractions — special, less-crowded locations.</div>
+      </div>
+      <div class="exp-window">
+        <div class="photo"><img src="images/49259d752aa01276f075b3f5bf136eac.jpg" alt="" loading="lazy"></div>
+        <div class="exp-cap"><strong>Local Experiences</strong>Meet locals and discover everyday Kiwi life.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Why JomNZ</span>
+      <h2>Built for Malaysian travellers</h2>
+      <hr class="rule">
+    </div>
+    <div class="why-list reveal">
+      <div class="why-row"><span>Halal food arrangement</span><span class="n">01</span></div>
+      <div class="why-row"><span>Prayer times &amp; places arranged</span><span class="n">02</span></div>
+      <div class="why-row"><span>Malay-speaking guide</span><span class="n">03</span></div>
+      <div class="why-row"><span>Visa assistance</span><span class="n">04</span></div>
+      <div class="why-row"><span>Airport pickup included</span><span class="n">05</span></div>
+      <div class="why-row"><span>4–5 star hotels</span><span class="n">06</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" id="about">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div class="about-window">
+        <div class="photo"><img src="images/f8a4bf1be806fc33c64cad1b01a68425.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="about-copy">
+        <span class="eyebrow" style="text-align:left">About JomNZ</span>
+        <p class="lead">We specialise in creating unique, personalised New Zealand travel experiences that go beyond the standard tourist itinerary — from breathtaking landscapes and hidden locations, to a real dairy farm, to the local communities many visitors never meet.</p>
+        <p class="statement">Your Journey. <span class="acc">Your New Zealand.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad gallery-section" id="gallery">
+  <div class="gallery-parallax-layer" aria-hidden="true" data-parallax-bg></div>
+  <div class="wrap">
+    <div class="section-head reveal" data-parallax-text>
+      <span class="eyebrow">The Collection</span>
+      <h2>Moments from the road</h2>
+      <hr class="rule">
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal-pop"><img src="images/a9f9ff35ded6529156f1822aa8bbe0c0.jpg" alt="Mirror lake and mountains" loading="lazy"><span class="gallery-cap">Mirror Lake</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/7b55bef625e8b26ce3c4c6fc126408fb.jpg" alt="Milford Sound waterfalls" loading="lazy"><span class="gallery-cap">Milford Sound</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/ff4911a4c16db638bf5a158cd88859fc.jpg" alt="Lamb grazing with mountain backdrop" loading="lazy"><span class="gallery-cap">High Country Farm</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/3cfa2310ae319e48e427c87733d3189f.jpg" alt="Lupin fields" loading="lazy"><span class="gallery-cap">Lupin Fields</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/b8cdd8909e640ce01212967fafa3838e.jpg" alt="Alpine valley and stream" loading="lazy"><span class="gallery-cap">Alpine Valley</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/cac803b9c1e6bf31c3f5f3dd1368192b.jpg" alt="Baldwin Street, Dunedin" loading="lazy"><span class="gallery-cap">Baldwin Street, Dunedin</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/e4a687f4a011ed3724aabf620a4a43a2.jpg" alt="Private and custom package" loading="lazy"><span class="gallery-cap">Private &amp; Custom</span></div>
+      <div class="gallery-item reveal-pop"><img src="images/1e2ed4e6991df891ecbe7331fdcf210e.jpg" alt="North and South package" loading="lazy"><span class="gallery-cap">North &amp; South</span></div>
+    </div>
+    <div class="gallery-more-wrap">
+      <button type="button" class="gallery-more-btn" id="galleryMoreBtn">View More (62)</button>
+    </div>
+  </div>
+</section>
+
+<div class="gallery-page" id="galleryPage" aria-hidden="true">
+  <div class="gallery-page-bar">
+    <button type="button" class="gallery-back-btn" id="galleryBackBtn">
+      <span class="gallery-back-arrow">&#8592;</span> Back
+    </button>
+    <span class="gallery-page-title">The Collection — 70 Moments</span>
+    <span class="gallery-page-count" id="galleryPageCount"></span>
+  </div>
+  <div class="masonry-wrap">
+    <div class="masonry-grid" id="masonryGrid">
+      <div class="masonry-item"><img data-src="images/a9f9ff35ded6529156f1822aa8bbe0c0.jpg" alt="Mirror lake and mountains" loading="lazy"><span class="masonry-cap">Mirror Lake</span></div>
+      <div class="masonry-item"><img data-src="images/7b55bef625e8b26ce3c4c6fc126408fb.jpg" alt="Milford Sound waterfalls" loading="lazy"><span class="masonry-cap">Milford Sound</span></div>
+      <div class="masonry-item"><img data-src="images/ff4911a4c16db638bf5a158cd88859fc.jpg" alt="Lamb grazing with mountain backdrop" loading="lazy"><span class="masonry-cap">High Country Farm</span></div>
+      <div class="masonry-item"><img data-src="images/3cfa2310ae319e48e427c87733d3189f.jpg" alt="Lupin fields" loading="lazy"><span class="masonry-cap">Lupin Fields</span></div>
+      <div class="masonry-item"><img data-src="images/b8cdd8909e640ce01212967fafa3838e.jpg" alt="Alpine valley and stream" loading="lazy"><span class="masonry-cap">Alpine Valley</span></div>
+      <div class="masonry-item"><img data-src="images/cac803b9c1e6bf31c3f5f3dd1368192b.jpg" alt="Baldwin Street, Dunedin" loading="lazy"><span class="masonry-cap">Baldwin Street, Dunedin</span></div>
+      <div class="masonry-item"><img data-src="images/e4a687f4a011ed3724aabf620a4a43a2.jpg" alt="Private and custom package" loading="lazy"><span class="masonry-cap">Private &amp; Custom</span></div>
+      <div class="masonry-item"><img data-src="images/1e2ed4e6991df891ecbe7331fdcf210e.jpg" alt="North and South package" loading="lazy"><span class="masonry-cap">North &amp; South</span></div>
+      <div class="masonry-item"><img data-src="images/54804e2032475b30959c7b8d6aaeb7d4.jpg" alt="South Island mountains" loading="lazy"><span class="masonry-cap">South Island</span></div>
+      <div class="masonry-item"><img data-src="images/81419f5d20af3c0afe27e2dc714a5241.jpg" alt="Self-drive countryside" loading="lazy"><span class="masonry-cap">Self Drive</span></div>
+      <div class="masonry-item"><img data-src="images/e46f4804a1885452daef0ed56487e604.jpg" alt="Dairy farm" loading="lazy"><span class="masonry-cap">Dairy Farm</span></div>
+      <div class="masonry-item"><img data-src="images/a3d86cc78c5afb9bd9c81d18a5bdd2d0.jpg" alt="Hidden scenic spot" loading="lazy"><span class="masonry-cap">Hidden Gem</span></div>
+      <div class="masonry-item"><img data-src="images/49259d752aa01276f075b3f5bf136eac.jpg" alt="Local experience" loading="lazy"><span class="masonry-cap">Local Life</span></div>
+      <div class="masonry-item"><img data-src="images/f8a4bf1be806fc33c64cad1b01a68425.jpg" alt="New Zealand countryside" loading="lazy"><span class="masonry-cap">The Countryside</span></div>
+      <div class="masonry-item"><img data-src="images/1c414ed59c7562db91e91f5b84310b28.jpg" alt="New Zealand travel photo 01" loading="lazy"><span class="masonry-cap">NZ Journal — 01</span></div>
+      <div class="masonry-item"><img data-src="images/45cd41f9ce24a11df9fdf43e6b737a73.jpg" alt="New Zealand travel photo 02" loading="lazy"><span class="masonry-cap">NZ Journal — 02</span></div>
+      <div class="masonry-item"><img data-src="images/c0a252fb166a3ea92a332dbd8d580001.jpg" alt="New Zealand travel photo 03" loading="lazy"><span class="masonry-cap">NZ Journal — 03</span></div>
+      <div class="masonry-item"><img data-src="images/78e38bc7e3cac73e18953706573b9551.jpg" alt="New Zealand travel photo 04" loading="lazy"><span class="masonry-cap">NZ Journal — 04</span></div>
+      <div class="masonry-item"><img data-src="images/3e2ae81c1bb900d993e533963343f57c.jpg" alt="New Zealand travel photo 05" loading="lazy"><span class="masonry-cap">NZ Journal — 05</span></div>
+      <div class="masonry-item"><img data-src="images/6dc2abd429eb1cf1728c836ae2460c53.jpg" alt="New Zealand travel photo 06" loading="lazy"><span class="masonry-cap">NZ Journal — 06</span></div>
+      <div class="masonry-item"><img data-src="images/1a850969dbe3535927bfc82326a14cbf.jpg" alt="New Zealand travel photo 07" loading="lazy"><span class="masonry-cap">NZ Journal — 07</span></div>
+      <div class="masonry-item"><img data-src="images/c7d1cc0a7e9c391e4ecf5d2a0d310500.jpg" alt="New Zealand travel photo 08" loading="lazy"><span class="masonry-cap">NZ Journal — 08</span></div>
+      <div class="masonry-item"><img data-src="images/84d8653eb5501dcc68be9c7f9b7e395f.jpg" alt="New Zealand travel photo 09" loading="lazy"><span class="masonry-cap">NZ Journal — 09</span></div>
+      <div class="masonry-item"><img data-src="images/50c4264aee050a628dae46e0a043d3dd.jpg" alt="New Zealand travel photo 10" loading="lazy"><span class="masonry-cap">NZ Journal — 10</span></div>
+      <div class="masonry-item"><img data-src="images/30cec79c64d1fe41bb34daa3865b6f95.jpg" alt="New Zealand travel photo 11" loading="lazy"><span class="masonry-cap">NZ Journal — 11</span></div>
+      <div class="masonry-item"><img data-src="images/bc98abc35560ded4390ccdb57a0fcdea.jpg" alt="New Zealand travel photo 12" loading="lazy"><span class="masonry-cap">NZ Journal — 12</span></div>
+      <div class="masonry-item"><img data-src="images/49cdbeeb8069cd2fae459750237696ea.jpg" alt="New Zealand travel photo 13" loading="lazy"><span class="masonry-cap">NZ Journal — 13</span></div>
+      <div class="masonry-item"><img data-src="images/d7dd7f0606ff91ecb5f3c36d03955244.jpg" alt="New Zealand travel photo 14" loading="lazy"><span class="masonry-cap">NZ Journal — 14</span></div>
+      <div class="masonry-item"><img data-src="images/5f96740795e7d6dd92c25be95c2c4ed0.jpg" alt="New Zealand travel photo 15" loading="lazy"><span class="masonry-cap">NZ Journal — 15</span></div>
+      <div class="masonry-item"><img data-src="images/1723bf9960036d6f6c2e6b60f0085b2b.jpg" alt="New Zealand travel photo 16" loading="lazy"><span class="masonry-cap">NZ Journal — 16</span></div>
+      <div class="masonry-item"><img data-src="images/ad309031a81c486af66264c7dca2b30a.jpg" alt="New Zealand travel photo 17" loading="lazy"><span class="masonry-cap">NZ Journal — 17</span></div>
+      <div class="masonry-item"><img data-src="images/6a960d734e810d62ed5de04955b0cc67.jpg" alt="New Zealand travel photo 18" loading="lazy"><span class="masonry-cap">NZ Journal — 18</span></div>
+      <div class="masonry-item"><img data-src="images/7fa0ef409e6cbb8dd4c704990b097c31.jpg" alt="New Zealand travel photo 19" loading="lazy"><span class="masonry-cap">NZ Journal — 19</span></div>
+      <div class="masonry-item"><img data-src="images/55c6e69bffccddcbdf3a13b9de3023e0.jpg" alt="New Zealand travel photo 20" loading="lazy"><span class="masonry-cap">NZ Journal — 20</span></div>
+      <div class="masonry-item"><img data-src="images/a668479520627690ed6b562838095276.jpg" alt="New Zealand travel photo 21" loading="lazy"><span class="masonry-cap">NZ Journal — 21</span></div>
+      <div class="masonry-item"><img data-src="images/9ef7aebf129c22890d63dce4cf471393.jpg" alt="New Zealand travel photo 22" loading="lazy"><span class="masonry-cap">NZ Journal — 22</span></div>
+      <div class="masonry-item"><img data-src="images/0bd073bbab9006fef1c656d60ce60aed.jpg" alt="New Zealand travel photo 23" loading="lazy"><span class="masonry-cap">NZ Journal — 23</span></div>
+      <div class="masonry-item"><img data-src="images/7fdf0c6262903c5f51dbff2cff6fb080.jpg" alt="New Zealand travel photo 24" loading="lazy"><span class="masonry-cap">NZ Journal — 24</span></div>
+      <div class="masonry-item"><img data-src="images/4f197ecbe4920ac47fe2ee7b39fec35b.jpg" alt="New Zealand travel photo 25" loading="lazy"><span class="masonry-cap">NZ Journal — 25</span></div>
+      <div class="masonry-item"><img data-src="images/25f1cf8f88870b657d6cd2ceb6135775.jpg" alt="New Zealand travel photo 26" loading="lazy"><span class="masonry-cap">NZ Journal — 26</span></div>
+      <div class="masonry-item"><img data-src="images/427a3da65e9a4cf3d3e3911225ecc14e.jpg" alt="New Zealand travel photo 27" loading="lazy"><span class="masonry-cap">NZ Journal — 27</span></div>
+      <div class="masonry-item"><img data-src="images/e37e8df242c6c9f1f64aa2fd16114d49.jpg" alt="New Zealand travel photo 28" loading="lazy"><span class="masonry-cap">NZ Journal — 28</span></div>
+      <div class="masonry-item"><img data-src="images/61431d47585939b6e204ed69b909ffb0.jpg" alt="New Zealand travel photo 29" loading="lazy"><span class="masonry-cap">NZ Journal — 29</span></div>
+      <div class="masonry-item"><img data-src="images/4c44f77c79eb96e71f04f11345204b79.jpg" alt="New Zealand travel photo 30" loading="lazy"><span class="masonry-cap">NZ Journal — 30</span></div>
+      <div class="masonry-item"><img data-src="images/3d1200d4c56200f943731863277ec591.jpg" alt="New Zealand travel photo 31" loading="lazy"><span class="masonry-cap">NZ Journal — 31</span></div>
+      <div class="masonry-item"><img data-src="images/33bb47c67205e19c1ff1db066254bebd.jpg" alt="New Zealand travel photo 32" loading="lazy"><span class="masonry-cap">NZ Journal — 32</span></div>
+      <div class="masonry-item"><img data-src="images/eb62a4882744b5a4213395895412ca98.jpg" alt="New Zealand travel photo 33" loading="lazy"><span class="masonry-cap">NZ Journal — 33</span></div>
+      <div class="masonry-item"><img data-src="images/0e485c972abd630ef7995aeaea753d99.jpg" alt="New Zealand travel photo 34" loading="lazy"><span class="masonry-cap">NZ Journal — 34</span></div>
+      <div class="masonry-item"><img data-src="images/ff80ee270be24604126de02bed0cbe4a.jpg" alt="New Zealand travel photo 35" loading="lazy"><span class="masonry-cap">NZ Journal — 35</span></div>
+      <div class="masonry-item"><img data-src="images/c75f6f7ac544c1cf8890f64eaf81b5e7.jpg" alt="New Zealand travel photo 36" loading="lazy"><span class="masonry-cap">NZ Journal — 36</span></div>
+      <div class="masonry-item"><img data-src="images/16f23113c0b5f129dcad1ab91d2ec77e.jpg" alt="New Zealand travel photo 37" loading="lazy"><span class="masonry-cap">NZ Journal — 37</span></div>
+      <div class="masonry-item"><img data-src="images/08e14e3ef6e51c54765321cd02d44813.jpg" alt="New Zealand travel photo 38" loading="lazy"><span class="masonry-cap">NZ Journal — 38</span></div>
+      <div class="masonry-item"><img data-src="images/b32c5b07e72f5b913643f72d30fc2d5d.jpg" alt="New Zealand travel photo 39" loading="lazy"><span class="masonry-cap">NZ Journal — 39</span></div>
+      <div class="masonry-item"><img data-src="images/ab954dfc34efbc8c93848289bdf96a8b.jpg" alt="New Zealand travel photo 40" loading="lazy"><span class="masonry-cap">NZ Journal — 40</span></div>
+      <div class="masonry-item"><img data-src="images/ba7dc2b5e0cde94eb13dde3fd776db97.jpg" alt="New Zealand travel photo 41" loading="lazy"><span class="masonry-cap">NZ Journal — 41</span></div>
+      <div class="masonry-item"><img data-src="images/985dd58b2ab108cc5088fac6663e3c90.jpg" alt="New Zealand travel photo 42" loading="lazy"><span class="masonry-cap">NZ Journal — 42</span></div>
+      <div class="masonry-item"><img data-src="images/d29d4959181387dc1fe38434f671a133.jpg" alt="New Zealand travel photo 43" loading="lazy"><span class="masonry-cap">NZ Journal — 43</span></div>
+      <div class="masonry-item"><img data-src="images/27eefe4541f2c6286e39c52f3a0ed258.jpg" alt="New Zealand travel photo 44" loading="lazy"><span class="masonry-cap">NZ Journal — 44</span></div>
+      <div class="masonry-item"><img data-src="images/f9017989034f68cb23da09e4fe0c54c3.jpg" alt="New Zealand travel photo 45" loading="lazy"><span class="masonry-cap">NZ Journal — 45</span></div>
+      <div class="masonry-item"><img data-src="images/8b630176a1a36777b0e0436f65799173.jpg" alt="New Zealand travel photo 46" loading="lazy"><span class="masonry-cap">NZ Journal — 46</span></div>
+      <div class="masonry-item"><img data-src="images/13787f8945e4578a5ef251c9c29d7097.jpg" alt="New Zealand travel photo 47" loading="lazy"><span class="masonry-cap">NZ Journal — 47</span></div>
+      <div class="masonry-item"><img data-src="images/8205ea07832ef314f1a043adfdf1f580.jpg" alt="New Zealand travel photo 48" loading="lazy"><span class="masonry-cap">NZ Journal — 48</span></div>
+      <div class="masonry-item"><img data-src="images/25a223e299b0fd04027f4c1c55c2df1a.jpg" alt="New Zealand travel photo 49" loading="lazy"><span class="masonry-cap">NZ Journal — 49</span></div>
+      <div class="masonry-item"><img data-src="images/ed8303b5bf48907cfa6bef2f1a864e01.jpg" alt="New Zealand travel photo 50" loading="lazy"><span class="masonry-cap">NZ Journal — 50</span></div>
+      <div class="masonry-item"><img data-src="images/0186c30851a28bb9a96b2bfea8302c35.jpg" alt="New Zealand travel photo 51" loading="lazy"><span class="masonry-cap">NZ Journal — 51</span></div>
+      <div class="masonry-item"><img data-src="images/a631561c0159d62c222abda8e99e112c.jpg" alt="New Zealand travel photo 52" loading="lazy"><span class="masonry-cap">NZ Journal — 52</span></div>
+      <div class="masonry-item"><img data-src="images/213280dce272ce1df9c182c4e55250a1.jpg" alt="New Zealand travel photo 53" loading="lazy"><span class="masonry-cap">NZ Journal — 53</span></div>
+      <div class="masonry-item"><img data-src="images/3acf8172d1447b7bcf62c96744b8bc4e.jpg" alt="New Zealand travel photo 54" loading="lazy"><span class="masonry-cap">NZ Journal — 54</span></div>
+      <div class="masonry-item"><img data-src="images/38cf79dc63e25ff504a5372913a2a534.jpg" alt="New Zealand travel photo 55" loading="lazy"><span class="masonry-cap">NZ Journal — 55</span></div>
+      <div class="masonry-item"><img data-src="images/46037f8549dbd7dae3e0630051a9f324.jpg" alt="New Zealand travel photo 56" loading="lazy"><span class="masonry-cap">NZ Journal — 56</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&#10005;</button>
+  <button type="button" class="lightbox-prev" id="lightboxPrev" aria-label="Previous photo">&#8249;</button>
+  <button type="button" class="lightbox-next" id="lightboxNext" aria-label="Next photo">&#8250;</button>
+  <div class="lightbox-stage">
+    <img id="lightboxImg" src="" alt="">
+    <span class="lightbox-cap" id="lightboxCap"></span>
+  </div>
+  <span class="lightbox-counter" id="lightboxCounter"></span>
+</div>
+
+<section class="section-pad contact-wrap" id="contact">
+  <div class="wrap reveal">
+    <span class="eyebrow">Ready When You Are</span>
+    <h2 style="font-family:var(--font-sub);font-size:26px;color:var(--color-deep-ink)">Let's design your New Zealand.</h2>
+    <p class="contact-terms">Secure your spot with a RM100/pax booking fee — 50% deposit follows, with full payment due 4 weeks before departure. Answer three quick questions and we'll tailor the reply.</p>
+
+    <div class="eq-flow" id="eqFlow">
+      <div class="eq-progress" aria-hidden="true">
+        <span class="eq-dot" data-dot="1"></span>
+        <span class="eq-dot" data-dot="2"></span>
+        <span class="eq-dot" data-dot="3"></span>
+      </div>
+
+      <div class="eq-step active" data-step="1">
+        <span class="eq-label">01 / 03</span>
+        <h3 class="eq-q">When are you planning to travel?</h3>
+        <div class="eq-options">
+          <button type="button" class="eq-option" data-value="Within 3 months">Within 3 months</button>
+          <button type="button" class="eq-option" data-value="3–6 months">3–6 months</button>
+          <button type="button" class="eq-option" data-value="6–12 months">6–12 months</button>
+          <button type="button" class="eq-option" data-value="Just exploring">Just exploring</button>
+        </div>
+      </div>
+
+      <div class="eq-step" data-step="2">
+        <span class="eq-label">02 / 03</span>
+        <h3 class="eq-q">Who's travelling with you?</h3>
+        <div class="eq-options">
+          <button type="button" class="eq-option" data-value="Solo">Solo</button>
+          <button type="button" class="eq-option" data-value="Partner">Partner</button>
+          <button type="button" class="eq-option" data-value="Family with kids">Family with kids</button>
+          <button type="button" class="eq-option" data-value="Friends / group">Friends / group</button>
+        </div>
+        <button type="button" class="eq-back uline" data-back="1">← Back</button>
+      </div>
+
+      <div class="eq-step" data-step="3">
+        <span class="eq-label">03 / 03</span>
+        <h3 class="eq-q">What kind of trip are you after?</h3>
+        <div class="eq-options">
+          <button type="button" class="eq-option" data-value="Private & custom">Private &amp; custom</button>
+          <button type="button" class="eq-option" data-value="Guided group tour">Guided group tour</button>
+          <button type="button" class="eq-option" data-value="Self-drive">Self-drive</button>
+          <button type="button" class="eq-option" data-value="Not sure yet">Not sure yet</button>
+        </div>
+        <button type="button" class="eq-back uline" data-back="2">← Back</button>
+      </div>
+
+      <div class="eq-step eq-done" data-step="done">
+        <span class="eq-label" style="text-align:center;display:block">You're Set</span>
+        <h3 class="eq-q">Thanks — here's what we've got.</h3>
+        <p class="eq-summary-line" id="eqSummaryLine"></p>
+        <div class="contact-actions">
+          <button type="button" class="uline" id="enquireBtn" style="background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font:inherit">Send Enquiry →</button>
+          <a href="#packages" class="uline">Browse Packages →</a>
+        </div>
+        <div class="cta-note" id="cta-note" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="foot-mark">JomNZ</span>
+    <span class="foot-meta">Concept mockup · Private &amp; Custom · North &amp; South · South Island · Self-Drive</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var revealEls = document.querySelectorAll('.reveal:not(.in), .reveal-pop:not(.in)');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---- Gallery section: scroll-linked parallax ---- */
+  var gallerySection = document.getElementById('gallery');
+  var parallaxBg = gallerySection ? gallerySection.querySelector('[data-parallax-bg]') : null;
+  var parallaxText = gallerySection ? gallerySection.querySelector('[data-parallax-text]') : null;
+  if(gallerySection && (parallaxBg || parallaxText) && !reduceMotion){
+    var ticking = false;
+    function updateParallax(){
+      ticking = false;
+      var rect = gallerySection.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      if(rect.bottom < 0 || rect.top > vh) return; // offscreen, skip work
+      var progress = (vh - rect.top) / (vh + rect.height); // 0 at enter, 1 at exit
+      progress = Math.max(0, Math.min(1, progress));
+      if(parallaxBg){ parallaxBg.style.transform = 'translateY(' + ((progress - 0.5) * 60) + 'px)'; }
+      if(parallaxText){ parallaxText.style.transform = 'translateY(' + ((progress - 0.5) * -28) + 'px)'; }
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){ requestAnimationFrame(updateParallax); ticking = true; }
+    }, {passive:true});
+    updateParallax();
+  }
+
+  var heroArch = document.getElementById('heroArch');
+  if(heroArch){
+    var slides = heroArch.querySelectorAll('img');
+    if(slides.length > 1 && !reduceMotion){
+      var current = 0;
+      setInterval(function(){
+        slides[current].classList.remove('is-active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('is-active');
+      }, 5000);
+    }
+  }
+
+  var eqFlow = document.getElementById('eqFlow');
+  if(eqFlow){
+    var eqSteps = eqFlow.querySelectorAll('.eq-step');
+    var eqDots = eqFlow.querySelectorAll('.eq-dot');
+    var eqAnswers = {};
+    var eqOrder = ['1','2','3','done'];
+
+    function eqGoTo(step){
+      eqSteps.forEach(function(s){ s.classList.toggle('active', s.getAttribute('data-step') === step); });
+      var idx = eqOrder.indexOf(step);
+      eqDots.forEach(function(d){
+        var dotIdx = parseInt(d.getAttribute('data-dot'), 10) - 1;
+        d.classList.remove('is-current','is-done');
+        if(step === 'done' || dotIdx < idx) d.classList.add('is-done');
+        else if(dotIdx === idx) d.classList.add('is-current');
+      });
+    }
+
+    eqFlow.querySelectorAll('.eq-option').forEach(function(opt){
+      opt.addEventListener('click', function(){
+        var step = opt.closest('.eq-step');
+        step.querySelectorAll('.eq-option').forEach(function(o){ o.classList.remove('selected'); });
+        opt.classList.add('selected');
+        eqAnswers[step.getAttribute('data-step')] = opt.getAttribute('data-value');
+
+        var nextStep = eqOrder[eqOrder.indexOf(step.getAttribute('data-step')) + 1];
+        setTimeout(function(){
+          if(nextStep === 'done'){
+            var line = eqAnswers['1'] + ' &middot; travelling ' + (eqAnswers['2'] || '').toLowerCase() + ' &middot; looking for ' + (eqAnswers['3'] || '').toLowerCase();
+            document.getElementById('eqSummaryLine').innerHTML = line;
+          }
+          eqGoTo(nextStep);
+        }, 320);
+      });
+    });
+
+    eqFlow.querySelectorAll('[data-back]').forEach(function(btn){
+      btn.addEventListener('click', function(){ eqGoTo(btn.getAttribute('data-back')); });
+    });
+  }
+
+  /* ---- Mobile hamburger nav ---- */
+  var navBurger = document.getElementById('navBurger');
+  var navMobilePanel = document.getElementById('navMobilePanel');
+  if(navBurger && navMobilePanel){
+    function closeNavPanel(){
+      navMobilePanel.classList.remove('is-open');
+      navMobilePanel.setAttribute('aria-hidden', 'true');
+      navBurger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+    }
+    function openNavPanel(){
+      navMobilePanel.classList.add('is-open');
+      navMobilePanel.setAttribute('aria-hidden', 'false');
+      navBurger.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('nav-open');
+    }
+    navBurger.addEventListener('click', function(){
+      if(navMobilePanel.classList.contains('is-open')){ closeNavPanel(); } else { openNavPanel(); }
+    });
+    navMobilePanel.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeNavPanel);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && navMobilePanel.classList.contains('is-open')){ closeNavPanel(); }
+    });
+  }
+
+  var galleryMoreBtn = document.getElementById('galleryMoreBtn');
+  var galleryPage = document.getElementById('galleryPage');
+  var galleryBackBtn = document.getElementById('galleryBackBtn');
+  var galleryPageCount = document.getElementById('galleryPageCount');
+  var masonryLoaded = false;
+  var lastScrollY = 0;
+
+  function openGalleryPage(){
+    if(!masonryLoaded){
+      var masonryImgs = document.querySelectorAll('#masonryGrid img[data-src]');
+      masonryImgs.forEach(function(img){
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+      });
+      if(galleryPageCount){ galleryPageCount.textContent = masonryImgs.length + ' photos'; }
+      masonryLoaded = true;
+    }
+    lastScrollY = window.scrollY;
+    galleryPage.classList.add('is-open');
+    galleryPage.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('gallery-page-open');
+    galleryPage.scrollTop = 0;
+  }
+
+  function closeGalleryPage(){
+    galleryPage.classList.remove('is-open');
+    galleryPage.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('gallery-page-open');
+    window.scrollTo(0, lastScrollY);
+  }
+
+  if(galleryMoreBtn && galleryPage){
+    galleryMoreBtn.addEventListener('click', openGalleryPage);
+  }
+  if(galleryBackBtn && galleryPage){
+    galleryBackBtn.addEventListener('click', closeGalleryPage);
+  }
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && galleryPage && galleryPage.classList.contains('is-open') && !(lightbox && lightbox.classList.contains('is-open'))){
+      closeGalleryPage();
+    }
+  });
+
+  /* ---- Lightbox: enlarge + next/previous ---- */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxCap = document.getElementById('lightboxCap');
+  var lightboxCounter = document.getElementById('lightboxCounter');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lightboxPrev = document.getElementById('lightboxPrev');
+  var lightboxNext = document.getElementById('lightboxNext');
+  var photoList = [];
+  var photoIndex = 0;
+
+  function buildPhotoList(){
+    photoList = Array.prototype.map.call(document.querySelectorAll('#masonryGrid .masonry-item'), function(item){
+      var img = item.querySelector('img');
+      return {
+        src: img.getAttribute('src') || img.getAttribute('data-src'),
+        alt: img.getAttribute('alt') || '',
+        cap: (item.querySelector('.masonry-cap') || {}).textContent || ''
+      };
+    });
+  }
+
+  function showPhoto(i){
+    if(!photoList.length) return;
+    photoIndex = (i + photoList.length) % photoList.length;
+    var p = photoList[photoIndex];
+    lightboxImg.src = p.src;
+    lightboxImg.alt = p.alt;
+    lightboxCap.textContent = p.cap;
+    lightboxCounter.textContent = (photoIndex + 1) + ' / ' + photoList.length;
+  }
+
+  function openLightbox(i){
+    buildPhotoList();
+    showPhoto(i);
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+  }
+
+  var masonryGridEl = document.getElementById('masonryGrid');
+  if(masonryGridEl){
+    masonryGridEl.addEventListener('click', function(e){
+      var item = e.target.closest('.masonry-item');
+      if(!item) return;
+      var items = Array.prototype.slice.call(masonryGridEl.querySelectorAll('.masonry-item'));
+      var idx = items.indexOf(item);
+      if(idx > -1){ openLightbox(idx); }
+    });
+  }
+  var mainGalleryGridEl = document.querySelector('#gallery .gallery-grid');
+  if(mainGalleryGridEl){
+    mainGalleryGridEl.addEventListener('click', function(e){
+      var item = e.target.closest('.gallery-item');
+      if(!item) return;
+      var items = Array.prototype.slice.call(mainGalleryGridEl.querySelectorAll('.gallery-item'));
+      var idx = items.indexOf(item);
+      if(idx > -1){ openLightbox(idx); }
+    });
+  }
+  if(lightboxClose){ lightboxClose.addEventListener('click', closeLightbox); }
+  if(lightboxPrev){ lightboxPrev.addEventListener('click', function(){ showPhoto(photoIndex - 1); }); }
+  if(lightboxNext){ lightboxNext.addEventListener('click', function(){ showPhoto(photoIndex + 1); }); }
+  if(lightbox){
+    lightbox.addEventListener('click', function(e){
+      if(e.target === lightbox){ closeLightbox(); }
+    });
+  }
+  document.addEventListener('keydown', function(e){
+    if(!lightbox || !lightbox.classList.contains('is-open')) return;
+    if(e.key === 'Escape'){ closeLightbox(); }
+    else if(e.key === 'ArrowLeft'){ showPhoto(photoIndex - 1); }
+    else if(e.key === 'ArrowRight'){ showPhoto(photoIndex + 1); }
+  });
+
+  var enquireBtn = document.getElementById('enquireBtn');
+  var note = document.getElementById('cta-note');
+  var noteTimer;
+  enquireBtn.addEventListener('click', function(){
+    note.textContent = 'Thanks — this concept page is for design review. The real enquiry form connects once the site is built.';
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function(){ note.textContent = ''; }, 5200);
+  });
+})();
+</script>
+
+</body>
+</html>
